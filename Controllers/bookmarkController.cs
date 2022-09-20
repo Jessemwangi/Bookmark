@@ -4,7 +4,7 @@ using Bookmark.Data;
 using Bookmark.Models;
 namespace Bookmark.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class bookmarkController : ControllerBase
     {
