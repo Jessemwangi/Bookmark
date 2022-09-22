@@ -6,7 +6,7 @@ using Bookmark.Models;
 
 namespace Bookmark.Controllers
 {
-    [Route("api/v/[controller]")]
+    [Route("api/v1/[controller]/[action]")]
     [ApiController]
     public class foldersController : ControllerBase
     {
@@ -16,8 +16,15 @@ namespace Bookmark.Controllers
         {
             this._bookmarkcontext = bookmarkcontext;
         }
+        [HttpGet()]
+        public JsonResult GetAll()
+        {
+            var result = _bookmarkcontext.foldermodels.ToList();
+
+            return new JsonResult(Ok(result));
+        }
         [HttpGet]
-        public JsonResult get(int ID)
+        public JsonResult Get(int ID)
         {
             var folderrecord = _bookmarkcontext.foldermodels.FirstOrDefault(x => x.Id == ID);
             if (folderrecord == null)
@@ -44,13 +51,29 @@ namespace Bookmark.Controllers
                 if (bookindb == null)
                 {
                     return new JsonResult(NotFound());
-                    bookindb = foldermodel;
-
+                   
                 }
-
+                else
+                {
+                    _bookmarkcontext.foldermodels.Update(bookindb);
+                }
             }
             _bookmarkcontext.SaveChanges();
             return new JsonResult(Ok(foldermodel));
+        }
+        
+        [HttpDelete]
+        public JsonResult Delete(int ID)
+        {
+            var FolderToDelete = _bookmarkcontext.foldermodels.FirstOrDefault(x => x.Id == ID);
+            if (FolderToDelete == null)
+            { return new JsonResult(NotFound()); }
+            else
+            {
+                _bookmarkcontext.foldermodels.Remove(FolderToDelete);
+                _bookmarkcontext.SaveChanges();
+                return new JsonResult(NoContent());
+            }
         }
     }
 }

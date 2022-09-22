@@ -7,7 +7,7 @@
         public string? URL { get; set; }
         public DateTime createdAt { get; set; }
         public DateTime updatedAt { get; set; } 
-        public IQueryable<foldermodel>? foldermodels { get; set; }
+        public List<foldermodel>? foldermodels { get; set; }
     }
 }
 //● Id: Unique identifier

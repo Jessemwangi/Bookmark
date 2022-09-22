@@ -4,7 +4,7 @@ using Bookmark.Data;
 using Bookmark.Models;
 namespace Bookmark.Controllers
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/[controller]/[action]")]
     [ApiController]
     public class bookmarkController : ControllerBase
     {
@@ -15,6 +15,13 @@ namespace Bookmark.Controllers
         {
             _bookmarkContext = context;
         }
+        [HttpGet()]
+        public JsonResult getall()
+        {
+            return new JsonResult(Ok(_bookmarkContext.Bookmarks.ToList()));
+        }
+
+
         [HttpGet]
         public JsonResult Get(int Id)
         {
@@ -39,6 +46,20 @@ namespace Bookmark.Controllers
             }
             _bookmarkContext.SaveChanges();
             return new JsonResult(Ok(_bookmarkmodel));
+        }
+
+        [HttpDelete]
+        public JsonResult Delete(int id)
+        {
+            var result = _bookmarkContext.Bookmarks.FirstOrDefault(X => X.Id==id);
+
+            if (result == null)
+                return new JsonResult(NotFound());
+
+            _bookmarkContext.Bookmarks.Remove(result);
+            _bookmarkContext.SaveChanges();
+
+            return new JsonResult(NoContent());
         }
     }
 }
