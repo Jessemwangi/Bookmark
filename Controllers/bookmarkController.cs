@@ -24,21 +24,21 @@ namespace Bookmark.Controllers
             return new JsonResult(Ok(result));
         }
         [HttpPost]
-        public JsonResult create(bookmarkmodel bookmarkmodel)
+        public JsonResult create(bookmarkmodel _bookmarkmodel)
         {
-            if (bookmarkmodel.Id==0)
+            if (_bookmarkmodel.Id == 0)
             {
-                _bookmarkContext.Bookmarks.Add(bookmarkmodel);
+                _bookmarkContext.Bookmarks.Add(_bookmarkmodel);
             }
             else
             {
-                var bookmarkindb = _bookmarkContext.Bookmarks.Find(bookmarkmodel.Id);
+                var bookmarkindb = _bookmarkContext.Bookmarks.Find(_bookmarkmodel.Id);
                 if (bookmarkindb == null)
                     return new JsonResult(NotFound());
-                bookmarkindb = bookmarkmodel;
+                bookmarkindb = _bookmarkmodel;
             }
             _bookmarkContext.SaveChanges();
-            return new JsonResult(Ok(bookmarkmodel));
+            return new JsonResult(Ok(_bookmarkmodel));
         }
     }
 }
