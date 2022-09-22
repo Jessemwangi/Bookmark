@@ -5,9 +5,9 @@
         public int Id { get; set; }
         public string Name { get; set; }
         public string URL { get; set; }
-        public int folderId { get; set; }
         public DateTime createdAt { get; set; }
         public DateTime updatedAt { get; set; } 
+        public list<foldermodel> foldermodels { get; set; }
     }
 }
 //● Id: Unique identifier
