@@ -3,7 +3,7 @@ using Bookmark.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<Bookmarkcontext>(opt => opt.UseInMemoryDatabase("Bookmapdb"));
+builder.Services.AddDbContext<Bookmarkcontext>(opt => opt.UseInMemoryDatabase("Bookurldb"));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

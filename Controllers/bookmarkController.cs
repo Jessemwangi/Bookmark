@@ -2,62 +2,82 @@
 using Microsoft.AspNetCore.Mvc;
 using Bookmark.Data;
 using Bookmark.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace Bookmark.Controllers
 {
     [Route("api/v1/[controller]/[action]")]
     [ApiController]
     public class bookmarkController : ControllerBase
     {
-        //private readonly folderContext _folderContext;
+
         private readonly Bookmarkcontext _bookmarkContext;
 
-        public bookmarkController(Bookmarkcontext context)
+        public  bookmarkController(Bookmarkcontext context)
         {
             _bookmarkContext = context;
         }
         [HttpGet()]
-        public JsonResult getall()
+        public async Task<JsonResult> getall()
         {
-            return new JsonResult(Ok(_bookmarkContext.Bookmarks.ToList()));
+            return new JsonResult(Ok(await _bookmarkContext.Bookmarks.ToListAsync()));
         }
 
 
         [HttpGet]
-        public JsonResult Get(int Id)
+        public async Task<JsonResult> Get(int Id)
         {
-            var result = _bookmarkContext.Bookmarks.Find(Id);
+            var result = await _bookmarkContext.Bookmarks.FindAsync(Id);
             if (result == null)
                 return new JsonResult(NotFound(result));
             return new JsonResult(Ok(result));
         }
         [HttpPost]
-        public JsonResult create(bookmarkmodel _bookmarkmodel)
+        public async Task<JsonResult> create(bookmarkmodel _bookmarkmodel)
         {
-            if (_bookmarkmodel.Id == 0)
+            var bookmarkindb = await _bookmarkContext.Bookmarks.FindAsync(_bookmarkmodel.Id);
+            if (bookmarkindb == null)
             {
-                _bookmarkContext.Bookmarks.Add(_bookmarkmodel);
+                await _bookmarkContext.Bookmarks.AddAsync(_bookmarkmodel);
             }
             else
             {
-                var bookmarkindb = _bookmarkContext.Bookmarks.Find(_bookmarkmodel.Id);
-                if (bookmarkindb == null)
-                    return new JsonResult(NotFound());
-                bookmarkindb = _bookmarkmodel;
+                    return new JsonResult(Conflict());
             }
-            _bookmarkContext.SaveChanges();
+            await _bookmarkContext.SaveChangesAsync();
             return new JsonResult(Ok(_bookmarkmodel));
         }
 
-        [HttpDelete]
-        public JsonResult Delete(int id)
+        [HttpPut]
+        [Route("{ID:int}")]
+
+        public async Task<JsonResult> updateboomark([FromRoute] int ID, UpdateBookmark updateBookmark) 
         {
-            var result = _bookmarkContext.Bookmarks.FirstOrDefault(X => X.Id==id);
+            var result = await _bookmarkContext.Bookmarks.FirstOrDefaultAsync(X => X.Id == ID);
+            if (result == null)
+            {
+                return new JsonResult(NotFound());
+            }
+            else
+            {
+                result.Name=updateBookmark.Name;
+                result.URL=updateBookmark.URL;
+                result.updatedAt=DateTime.Now;
+                await _bookmarkContext.SaveChangesAsync();
+                return new JsonResult(Ok(updateBookmark));
+            }
+        }
+
+        [HttpDelete]
+        public async Task<JsonResult> Delete(int id)
+        {
+            var result = await _bookmarkContext.Bookmarks.FirstOrDefaultAsync(X => X.Id ==id);
 
             if (result == null)
                 return new JsonResult(NotFound());
 
-            _bookmarkContext.Bookmarks.Remove(result);
-            _bookmarkContext.SaveChanges();
+           _bookmarkContext.Bookmarks.Remove(result);
+           await _bookmarkContext.SaveChangesAsync();
 
             return new JsonResult(NoContent());
         }

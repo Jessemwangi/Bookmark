@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Bookmark.Data;
 using Bookmark.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bookmark.Controllers
 {
@@ -17,16 +18,16 @@ namespace Bookmark.Controllers
             this._bookmarkcontext = bookmarkcontext;
         }
         [HttpGet()]
-        public JsonResult GetAll()
+        public async Task<JsonResult> GetAll()
         {
-            var result = _bookmarkcontext.foldermodels.ToList();
+            var result = await _bookmarkcontext.foldermodels.ToListAsync();
 
             return new JsonResult(Ok(result));
         }
         [HttpGet]
-        public JsonResult Get(int ID)
+        public async Task<JsonResult> Get(int ID)
         {
-            var folderrecord = _bookmarkcontext.foldermodels.FirstOrDefault(x => x.Id == ID);
+            var folderrecord = await _bookmarkcontext.foldermodels.FirstOrDefaultAsync(x => x.Id == ID);
             if (folderrecord == null)
             {
                 return new JsonResult(NotFound(folderrecord));
@@ -39,29 +40,41 @@ namespace Bookmark.Controllers
 
         }
         [HttpPost]
-        public JsonResult Create(foldermodel foldermodel)
+        public async Task<JsonResult> Create(foldermodel foldermodel)
         {
-            if (foldermodel.Id == 0)
+            var folderRec = await _bookmarkcontext.foldermodels.FirstOrDefaultAsync(x => x.Id == foldermodel.Id);
+             if (folderRec == null)
             {
-                _bookmarkcontext.foldermodels.Add(foldermodel);
+                await _bookmarkcontext.foldermodels.AddAsync(foldermodel);
+                          }
+            else
+            {
+                    return new JsonResult(Conflict());
+            }
+            await _bookmarkcontext.SaveChangesAsync();
+            return new JsonResult(Ok(foldermodel));
+        }
+
+        [HttpPut]
+        [Route("{ID:int}")]
+        public async Task<JsonResult> updateFolder([FromRoute] int ID, addUpdateFolder updateFolder)
+        {
+            var foldertoupdate= await _bookmarkcontext.foldermodels.FirstOrDefaultAsync(x => x.Id == ID);
+            if (foldertoupdate == null)
+            {
+                return new JsonResult(NoContent());
             }
             else
             {
-                var bookindb = _bookmarkcontext.foldermodels.FirstOrDefault(x => x.Id == foldermodel.Id);
-                if (bookindb == null)
-                {
-                    return new JsonResult(NotFound());
-                   
-                }
-                else
-                {
-                    _bookmarkcontext.foldermodels.Update(bookindb);
-                }
+                foldertoupdate.Name= updateFolder.Name;
+                foldertoupdate.Description= updateFolder.Description;
+                foldertoupdate.UpdatedDate=DateTime.Now;
+            await _bookmarkcontext.SaveChangesAsync();
+                return new JsonResult(Ok(updateFolder));
             }
-            _bookmarkcontext.SaveChanges();
-            return new JsonResult(Ok(foldermodel));
+
         }
-        
+
         [HttpDelete]
         public JsonResult Delete(int ID)
         {
