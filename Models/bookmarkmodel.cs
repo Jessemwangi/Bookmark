@@ -7,6 +7,8 @@
         public string? URL { get; set; }
         public DateTime createdAt { get; set; }
         public DateTime updatedAt { get; set; } 
+        public int? CategoryId { get; set; }
+        public BookmarkCategories? BookmarKCategories { get; set; }
         public List<foldermodel>? foldermodels { get; set; }
     }
 }
