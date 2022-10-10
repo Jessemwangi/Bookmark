@@ -19,9 +19,14 @@ namespace Bookmark.Controllers
         }
         // GET: api/<BookmarkCartegories>
         [HttpGet]
-        public string[] Get()
+        public JsonResult Get()
         {
-            return  new string[] { "value1", "value2" };
+            var result = _bookmarkcontext.BookmarkCategories.ToList();
+            if (result.Any())
+            {
+                return new JsonResult(Ok(result));
+            }
+            return new JsonResult(Ok("no data was returned"));
         }
 
         // GET api/<BookmarkCartegories>/5
