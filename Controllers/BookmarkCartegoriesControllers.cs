@@ -1,6 +1,7 @@
 ﻿using Bookmark.Data;
 using Bookmark.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -51,7 +52,8 @@ namespace Bookmark.Controllers
             bookmarks.CategoryName = addBookmarkCategory.CategoryName;
             bookmarks.Agelimit = addBookmarkCategory.Agelimit;
             bookmarks.description = addBookmarkCategory.description;
-            bookmarks.CategoryName = addBookmarkCategory.CategoryName;
+            bookmarks.CreatedDate = DateTime.UtcNow;
+           
             _bookmarkcontext.BookmarkCategories.Add(bookmarks);
             _bookmarkcontext.SaveChanges();
             return new JsonResult(Ok(bookmarks));
@@ -60,8 +62,23 @@ namespace Bookmark.Controllers
 
         // PUT api/<BookmarkCartegories>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public JsonResult Put(int id, [FromBody] AddBookmarkCategory addBookmarkCategory)
         {
+            
+             var result = _bookmarkcontext.BookmarkCategories.FirstOrDefault(x => x.BookmarkCategoriesId == id);
+            if (result == null)
+            {
+                return new JsonResult(NotFound("the id is not in our system"));
+            }
+            else
+            {
+                result.description = addBookmarkCategory.description;
+                result.UpdatedTime = DateTime.UtcNow;
+                result.Agelimit = addBookmarkCategory.Agelimit;
+                result.CategoryName = addBookmarkCategory.CategoryName;
+                _bookmarkcontext.Update(result);
+                _bookmarkcontext.SaveChanges(true);e
+            }
         }
 
         // DELETE api/<BookmarkCartegories>/5

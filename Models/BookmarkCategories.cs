@@ -7,6 +7,10 @@
         public int Agelimit { get; set; }
 
         public string? description { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
+
+        public DateTime? UpdatedTime { get; set; }
         public ICollection<bookmarkmodel>? Bookmarks { get; set; }
 
     }
