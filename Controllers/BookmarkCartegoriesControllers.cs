@@ -45,7 +45,7 @@ namespace Bookmark.Controllers
 
         // POST api/<BookmarkCartegories>
         [HttpPost]
-        public JsonResult AddBookmarkCat(AddBookmarkCategory addBookmarkCategory)
+        public async Task<JsonResult> AddBookmarkCat(AddBookmarkCategory addBookmarkCategory)
         {
             var bookmarks = new BookmarkCategories();
             //bookmarks.CategoryId = addBookmarkCategory.CategoryId;
@@ -54,8 +54,8 @@ namespace Bookmark.Controllers
             bookmarks.description = addBookmarkCategory.description;
             bookmarks.CreatedDate = DateTime.UtcNow;
            
-            _bookmarkcontext.BookmarkCategories.Add(bookmarks);
-            _bookmarkcontext.SaveChanges();
+           await _bookmarkcontext.BookmarkCategories.AddAsync(bookmarks);
+           await _bookmarkcontext.SaveChangesAsync();
             return new JsonResult(Ok(bookmarks));
 
         }
@@ -77,7 +77,8 @@ namespace Bookmark.Controllers
                 result.Agelimit = addBookmarkCategory.Agelimit;
                 result.CategoryName = addBookmarkCategory.CategoryName;
                 _bookmarkcontext.Update(result);
-                _bookmarkcontext.SaveChanges(true);e
+                _bookmarkcontext.SaveChanges(true);
+                return new JsonResult(Ok(result));
             }
         }
 
