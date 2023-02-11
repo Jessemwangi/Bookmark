@@ -1,6 +1,6 @@
 ﻿namespace Bookmark.Models
 {
-    public class foldermodel
+    public class Foldermodel
     {
         public int Id { get; set; }
         public string? Name { get; set; }

@@ -2,10 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 namespace Bookmark.Data
 {
-    public class folderContext : DbContext
+    public class FolderContext : DbContext
     {
-        public DbSet<foldermodel> Foldermodels { get; set; }
-        public folderContext(DbContextOptions<folderContext> options)
+        public DbSet<Foldermodel> Foldermodels { get; set; }
+        public FolderContext(DbContextOptions<FolderContext> options)
             : base(options)
         {
 

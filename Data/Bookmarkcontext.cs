@@ -11,8 +11,8 @@ namespace Bookmark.Data
         {
 
         }
-          public DbSet<bookmarkmodel> Bookmarks { get; set; }
-          public DbSet<foldermodel>foldermodels {get; set;}
+          public DbSet<Bookmarkmodel> Bookmarks { get; set; }
+          public DbSet<Foldermodel>Foldermodels {get; set;}
         public DbSet<BookmarkCategories> BookmarkCategories { get; set; }
     }
 }

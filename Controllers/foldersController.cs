@@ -9,25 +9,25 @@ namespace Bookmark.Controllers
 {
     [Route("api/v1/[controller]/[action]")]
     [ApiController]
-    public class foldersController : ControllerBase
+    public class FoldersController : ControllerBase
     {
         private readonly Bookmarkcontext _bookmarkcontext;
 
-        public foldersController(Bookmarkcontext bookmarkcontext)
+        public FoldersController(Bookmarkcontext bookmarkcontext)
         {
             this._bookmarkcontext = bookmarkcontext;
         }
         [HttpGet()]
         public async Task<JsonResult> GetAll()
         {
-            var result = await _bookmarkcontext.foldermodels.ToListAsync();
+            var result = await _bookmarkcontext.Foldermodels.ToListAsync();
 
             return new JsonResult(Ok(result));
         }
         [HttpGet]
         public async Task<JsonResult> Get(int ID)
         {
-            var folderrecord = await _bookmarkcontext.foldermodels.FirstOrDefaultAsync(x => x.Id == ID);
+            var folderrecord = await _bookmarkcontext.Foldermodels.FirstOrDefaultAsync(x => x.Id == ID);
             if (folderrecord == null)
             {
                 return new JsonResult(NotFound(folderrecord));
@@ -40,12 +40,12 @@ namespace Bookmark.Controllers
 
         }
         [HttpPost]
-        public async Task<JsonResult> Create(foldermodel foldermodel)
+        public async Task<JsonResult> Create(Foldermodel foldermodel)
         {
-            var folderRec = await _bookmarkcontext.foldermodels.FirstOrDefaultAsync(x => x.Id == foldermodel.Id);
+            var folderRec = await _bookmarkcontext.Foldermodels.FirstOrDefaultAsync(x => x.Id == foldermodel.Id);
              if (folderRec == null)
             {
-                await _bookmarkcontext.foldermodels.AddAsync(foldermodel);
+                await _bookmarkcontext.Foldermodels.AddAsync(foldermodel);
                           }
             else
             {
@@ -57,9 +57,9 @@ namespace Bookmark.Controllers
 
         [HttpPut]
         [Route("{ID:int}")]
-        public async Task<JsonResult> updateFolder([FromRoute] int ID, addUpdateFolder updateFolder)
+        public async Task<JsonResult> UpdateFolder([FromRoute] int ID, AddUpdateFolder updateFolder)
         {
-            var foldertoupdate= await _bookmarkcontext.foldermodels.FirstOrDefaultAsync(x => x.Id == ID);
+            var foldertoupdate= await _bookmarkcontext.Foldermodels.FirstOrDefaultAsync(x => x.Id == ID);
             if (foldertoupdate == null)
             {
                 return new JsonResult(NoContent());
@@ -78,12 +78,12 @@ namespace Bookmark.Controllers
         [HttpDelete]
         public JsonResult Delete(int ID)
         {
-            var FolderToDelete = _bookmarkcontext.foldermodels.FirstOrDefault(x => x.Id == ID);
+            var FolderToDelete = _bookmarkcontext.Foldermodels.FirstOrDefault(x => x.Id == ID);
             if (FolderToDelete == null)
             { return new JsonResult(NotFound()); }
             else
             {
-                _bookmarkcontext.foldermodels.Remove(FolderToDelete);
+                _bookmarkcontext.Foldermodels.Remove(FolderToDelete);
                 _bookmarkcontext.SaveChanges();
                 return new JsonResult(NoContent());
             }

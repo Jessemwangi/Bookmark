@@ -1,15 +1,16 @@
 ﻿namespace Bookmark.Models
 {
-    public class bookmarkmodel
+    public class Bookmarkmodel
     {
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? URL { get; set; }
-        public DateTime createdAt { get; set; }
-        public DateTime updatedAt { get; set; } 
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; } 
         public int? CategoryId { get; set; }
+        public int? FolderId { get; set; }
         public BookmarkCategories? BookmarKCategories { get; set; }
-        public List<foldermodel>? foldermodels { get; set; }
+        public List<Foldermodel>? Foldermodels { get; set; }  //folder can have a list or collection of bookmarks
     }
 }
 //● Id: Unique identifier

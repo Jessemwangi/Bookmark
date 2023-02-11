@@ -51,7 +51,7 @@ namespace Bookmark.Controllers
             //bookmarks.CategoryId = addBookmarkCategory.CategoryId;
             bookmarks.CategoryName = addBookmarkCategory.CategoryName;
             bookmarks.Agelimit = addBookmarkCategory.Agelimit;
-            bookmarks.description = addBookmarkCategory.description;
+            bookmarks.Description = addBookmarkCategory.Description;
             bookmarks.CreatedDate = DateTime.UtcNow;
            
            await _bookmarkcontext.BookmarkCategories.AddAsync(bookmarks);
@@ -72,7 +72,7 @@ namespace Bookmark.Controllers
             }
             else
             {
-                result.description = addBookmarkCategory.description;
+                result.Description = addBookmarkCategory.Description;
                 result.UpdatedTime = DateTime.UtcNow;
                 result.Agelimit = addBookmarkCategory.Agelimit;
                 result.CategoryName = addBookmarkCategory.CategoryName;

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Bookmark.Data;
+using Bookmark.Controllers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -23,5 +24,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapBookmarkmodelEndpoints();
 
 app.Run();
